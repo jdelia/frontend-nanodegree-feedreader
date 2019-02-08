@@ -24,7 +24,7 @@ $(
        */
       it("are defined", function() {
         expect(allFeeds).toBeDefined();
-        expect(allFeeds.length).not.toBe(0);
+        expect(allFeeds.length > 0).toBe(true);
       });
 
       /* TODO: Write a test that loops through each feed
@@ -34,7 +34,7 @@ $(
       it("urls are defined and not empty", function() {
         for (let feed of allFeeds) {
           expect(feed.url).toBeDefined();
-          expect(feed.url.length).not.toBe(0);
+          expect(feed.url.length > 0).toBe(true);
         }
       });
 
@@ -46,7 +46,7 @@ $(
       it("names are defined and not empty", function() {
         for (let feed of allFeeds) {
           expect(feed.name).toBeDefined();
-          expect(feed.name.length).not.toBe(0);
+          expect(feed.name.length > 0).toBe(true);
         }
       });
     });
@@ -61,6 +61,7 @@ $(
        */
       it("menu hidden by default", function() {
         const body = document.querySelector("body");
+        // we are expecting to find the menu-hidden class on the body element.
         expect(body.classList.contains("menu-hidden")).toBe(true);
       });
 
@@ -90,7 +91,8 @@ $(
        * Remember, loadFeed() is asynchronous so this test will require
        * the use of Jasmine's beforeEach and asynchronous done() function.
        */
-      /* passing done to beforeEach to signal it has finished before proceeding with the test */
+
+      // passing done to beforeEach to signal it has finished before proceeding with the test
 
       beforeEach(function(done) {
         loadFeed(0, done);
@@ -99,7 +101,7 @@ $(
       it("work completed", function() {
         // get feed container
         const feedContainer = document.querySelector(".feed");
-        // check length
+        // check length - it should be greater than 0
         expect(feedContainer.children.length > 0).toBe(true);
       });
     });
@@ -114,15 +116,19 @@ $(
       const feedContainer = document.querySelector(".feed");
 
       beforeEach(function(done) {
+        // First load initial feed
         loadFeed(0);
+        // Load the feed into an array for comparison later
         Array.from(feedContainer.children).forEach(function(entry, index) {
           initialFeed.push(entry.innerText);
         });
+        // Now load a different feed. Using done here so that the test does not run until the beforeEach has completed.
         loadFeed(1, done);
       });
 
       it("the content changes", function() {
         Array.from(feedContainer.children).forEach(function(feedEntry, index) {
+          // compare the current feed to the initialFeed we created in beforeEach - they should be false.
           expect(feedEntry.innerText === initialFeed[index]).toBe(false);
         });
       });
