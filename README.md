@@ -7,7 +7,7 @@
 
 ## Documentation
 
-To run the test, visit the [demo](https://github.com/jdelia/frontend-nanodegree-feedreader/) page.
+To see it in action, visit the [demo](https://jdelia.github.io/frontend-nanodegree-feedreader/) page.
 
 If you want to explore the code and try it locally,
 
