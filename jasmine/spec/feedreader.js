@@ -27,9 +27,8 @@ $(
         expect(allFeeds.length > 0).toBe(true);
       });
 
-      /* TODO: Write a test that loops through each feed
-       * in the allFeeds object and ensures it has a URL defined
-       * and that the URL is not empty.
+      /* Loop through each feed in the allFeeds object and ensure
+       * it has a URL defined and that the URL is not empty.
        */
       it("urls are defined and not empty", function() {
         for (let feed of allFeeds) {
@@ -38,9 +37,8 @@ $(
         }
       });
 
-      /* TODO: Write a test that loops through each feed
-       * in the allFeeds object and ensures it has a name defined
-       * and that the name is not empty.
+      /* Loop through each feed in the allFeeds object and ensure
+       * name is defined and that the name is not empty.
        */
 
       it("names are defined and not empty", function() {
@@ -51,24 +49,16 @@ $(
       });
     });
 
-    /* TODO: Write a new test suite named "The menu" */
-
     describe("The menu", function() {
-      /* TODO: Write a test that ensures the menu element is
-       * hidden by default. You'll have to analyze the HTML and
-       * the CSS to determine how we're performing the
-       * hiding/showing of the menu element.
-       */
+      /* Test that the menu element is hidden by default. */
       it("menu hidden by default", function() {
         const body = document.querySelector("body");
         // we are expecting to find the menu-hidden class on the body element.
         expect(body.classList.contains("menu-hidden")).toBe(true);
       });
 
-      /* TODO: Write a test that ensures the menu changes
-       * visibility when the menu icon is clicked. This test
-       * should have two expectations: does the menu display when
-       * clicked and does it hide when clicked again.
+      /* Test that the menu changes visibility when the menu icon is clicked.
+       * Test that menu is visible when clicked and hidden when clicked again.
        */
 
       it("menu toggles on/off when clicked", function() {
@@ -82,14 +72,11 @@ $(
         expect(body.classList.contains("menu-hidden")).toBe(true);
       });
     });
-    /* TODO: Write a new test suite named "Initial Entries" */
 
     describe("Initial Entries", function() {
-      /* TODO: Write a test that ensures when the loadFeed
-       * function is called and completes its work, there is at least
+      /* Test that ensures when the loadFeed function is called
+       * and completes its work, there is at least
        * a single .entry element within the .feed container.
-       * Remember, loadFeed() is asynchronous so this test will require
-       * the use of Jasmine's beforeEach and asynchronous done() function.
        */
 
       // passing done to beforeEach to signal it has finished before proceeding with the test
@@ -100,37 +87,37 @@ $(
 
       it("work completed", function() {
         // get feed container
-        const feedContainer = document.querySelector(".feed");
+        const feedEntries = document.querySelectorAll(".feed .entry");
         // check length - it should be greater than 0
-        expect(feedContainer.children.length > 0).toBe(true);
+        expect(feedEntries.length > 0).toBe(true);
       });
     });
 
-    /* TODO: Write a new test suite named "New Feed Selection" */
     describe("New Feed Selection", function() {
-      /* TODO: Write a test that ensures when a new feed is loaded
-       * by the loadFeed function that the content actually changes.
-       * Remember, loadFeed() is asynchronous.
+      /* Test when a new feed is loaded by the loadFeed function
+       * that the content actually changes.
        */
-      const initialFeed = [];
+      let feedAfterFirstLoad;
+      let feedAfterSecondLoad;
+
       const feedContainer = document.querySelector(".feed");
 
       beforeEach(function(done) {
         // First load initial feed
-        loadFeed(0);
-        // Load the feed into an array for comparison later
-        Array.from(feedContainer.children).forEach(function(entry, index) {
-          initialFeed.push(entry.innerText);
+        loadFeed(0, function() {
+          // Store the innerHTML of feedContainer
+          feedAfterFirstLoad = feedContainer.innerHTML;
+          loadFeed(1, function() {
+            // Store the innerHTML of feedContainer
+            feedAfterSecondLoad = feedContainer.innerHTML;
+            done();
+          });
         });
-        // Now load a different feed. Using done here so that the test does not run until the beforeEach has completed.
-        loadFeed(1, done);
       });
 
       it("the content changes", function() {
-        Array.from(feedContainer.children).forEach(function(feedEntry, index) {
-          // compare the current feed to the initialFeed we created in beforeEach - they should be false.
-          expect(feedEntry.innerText === initialFeed[index]).toBe(false);
-        });
+        // compare the contents of two feeds we created in beforeEach - they should be equal.
+        expect(feedAfterFirstLoad).not.toEqual(feedAfterSecondLoad);
       });
     });
   })()
